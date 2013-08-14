@@ -36,7 +36,7 @@ from oauth2client.client import SignedJwtAssertionCredentials
 # the client id created in the developer console.
 SERVICE_ACCOUNT_EMAIL = '<some-id>@developer.gserviceaccount.com'
 
-# Update SERVICE_ACCOUNT)PKCS12_FILE_PATH with the file path to the private key
+# Update SERVICE_ACCOUNT_PKCS12_FILE_PATH with the file path to the private key
 # file downloaded from the developer console.
 SERVICE_ACCOUNT_PKCS12_FILE_PATH = '/path/to/<public_key_fingerprint>-privatekey.p12'
 
