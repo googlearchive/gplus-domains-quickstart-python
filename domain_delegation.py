@@ -73,7 +73,7 @@ def authenticate():
   http = credentials.authorize(http)
 
   # Create and return the Plus service object
-  return build('plus', 'v1domains', http=http)
+  return build('plusDomains', 'v1', http=http)
 
 
 def activitiesInsert(service):
