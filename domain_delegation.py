@@ -29,7 +29,7 @@ import pprint
 
 from apiclient.discovery import build
 
-from oauth2client.client import SignedJwtAssertionCredentials
+from oauth2client.service_account import ServiceAccountCredentials
 
 
 # Update SERVICE_ACCOUNT_EMAIL with the email address of the service account for
@@ -61,16 +61,16 @@ def authenticate():
 
   print 'Authenticate the domain for %s' % USER_EMAIL
 
-  f = open(SERVICE_ACCOUNT_PKCS12_FILE_PATH, 'rb')
-  key = f.read()
-  f.close()
+  # Make service account credentials
+  credentials = ServiceAccountCredentials.from_p12_keyfile(
+    SERVICE_ACCOUNT_EMAIL, SERVICE_ACCOUNT_PKCS12_FILE_PATH, scopes=SCOPES)
 
   # Setting the sub field with USER_EMAIL allows you to make API calls using the
   # special keyword 'me' in place of a user id for that user.
-  credentials = SignedJwtAssertionCredentials(SERVICE_ACCOUNT_EMAIL, key,
-      scope=SCOPES, sub=USER_EMAIL)
+  delegate_credentials = credentials.create_delegated(USER_EMAIL)
+
   http = httplib2.Http()
-  http = credentials.authorize(http)
+  http = delegate_credentials.authorize(http)
 
   # Create and return the Plus service object
   return build('plusDomains', 'v1', http=http)
