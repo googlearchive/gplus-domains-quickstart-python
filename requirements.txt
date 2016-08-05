@@ -1,2 +1,2 @@
-google-api-python-client==1.1
+google-api-python-client==1.5.1
 httplib2==0.8
