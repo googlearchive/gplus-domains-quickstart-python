@@ -20,6 +20,12 @@ This program shows how to authenticate an app for domain-wide delegation and how
 to complete an activities.insert API call. For details on how to authenticate on
 a per-user basis using OAuth 2.0, or for examples of other API calls, please see
 the documentation at https://developers.google.com/+/domains/.
+
+Changelog:
+- 2017-12-29: 
+--- Update authenticate() to use JSON credentials.
+--- Remove SERVICE_ACCOUNT_EMAIL, as it's not necessary for JSON authentication.
+--- Replace references to SERVICE_ACCOUNT_PKCS12_FILE_PATH with SERVICE_ACCOUNT_JSON_FILE_PATH, and update the associated path.
 """
 
 __author__ = 'joannasmith@google.com (Joanna Smith)'
@@ -31,14 +37,17 @@ from apiclient.discovery import build
 
 from oauth2client.service_account import ServiceAccountCredentials
 
-
-# Update SERVICE_ACCOUNT_EMAIL with the email address of the service account for
-# the client id created in the developer console.
-SERVICE_ACCOUNT_EMAIL = '<some-id>@developer.gserviceaccount.com'
-
+#--- Start remove section.
 # Update SERVICE_ACCOUNT_PKCS12_FILE_PATH with the file path to the private key
 # file downloaded from the developer console.
 SERVICE_ACCOUNT_PKCS12_FILE_PATH = '/path/to/<public_key_fingerprint>-privatekey.p12'
+#--- End remove section.
+
+#--- Start add section.
+# Update SERVICE_ACCOUNT_JSON_FILE_PATH with the file path to the private key
+# file downloaded from the developer console.
+SERVICE_ACCOUNT_JSON_FILE_PATH = '/path/to/<private-key>.json'
+#--- End add section.
 
 # Update USER_EMAIL with the email address of the user within your domain that
 # you would like to act on behalf of.
@@ -62,8 +71,11 @@ def authenticate():
   print 'Authenticate the domain for %s' % USER_EMAIL
 
   # Make service account credentials
+  #--- Replace this line.
   credentials = ServiceAccountCredentials.from_p12_keyfile(
     SERVICE_ACCOUNT_EMAIL, SERVICE_ACCOUNT_PKCS12_FILE_PATH, scopes=SCOPES)
+  #--- With this line.
+  credentials = ServiceAccountCredentials.from_json_keyfile_name(SERVICE_ACCOUNT_JSON_FILE_PATH, scopes=SCOPES)
 
   # Setting the sub field with USER_EMAIL allows you to make API calls using the
   # special keyword 'me' in place of a user id for that user.
